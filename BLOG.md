@@ -287,7 +287,7 @@ student_score/
 
 ## 🎯 十、总结与收获
 
-通过本次课程设计，我深入实践了以下技能：
+通过本次课程设计，我们深入实践了以下技能：
 
 1. **Spring Boot 全栈开发**：从 Controller 到 Service 到 Repository，完整掌握了 Spring Boot 的开发流程
 2. **JPA/Hibernate 数据持久化**：实体映射、关联查询、批量操作、唯一约束等
