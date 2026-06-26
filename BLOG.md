@@ -10,7 +10,7 @@
 
 > 🏫 **项目名称**：Student Score Management System（学生成绩管理系统）  
 > 📅 **开发周期**：2026年6月  
-> 🔗 **Git 仓库**：[GitHub 项目地址](https://github.com/zm2qs5nhks-collab/student_score)（请替换为你的实际仓库链接）
+> 🔗 **Git 仓库**：[GitHub 项目地址](https://github.com/zm2qs5nhks-collab/qlu_java_project)（请替换为你的实际仓库链接）
 
 ---
 
@@ -189,7 +189,7 @@ float mathScore = (float) Math.round(
 
 ## 🔗 七、项目 Git 地址
 
-- **GitHub 仓库**：[https://github.com/zm2qs5nhks-collab/student_score](https://github.com/zm2qs5nhks-collab/student_score)（请替换为你的实际仓库地址）
+- **GitHub 仓库**：[https://github.com/zm2qs5nhks-collab/qlu_java_project](https://github.com/zm2qs5nhks-collab/qlu_java_project)（请替换为你的实际仓库地址）
 
 ### 项目结构
 
