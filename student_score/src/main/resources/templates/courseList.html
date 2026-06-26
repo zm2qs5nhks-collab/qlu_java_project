@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>课程列表</title>
+</head>
+<body>
+<h3>课程列表</h3>
+<a href="/course/toAdd">新增课程</a>
+<a href="/">返回首页</a>
+
+<table border="1" cellpadding="5" cellspacing="0" style="margin-top:10px">
+    <tr>
+        <th>序号</th>
+        <th>课程名称</th>
+        <th>学分</th>
+        <th>操作</th>
+    </tr>
+    <!-- stat实现删除后序号连续不中断 -->
+    <tr th:each="c,stat : ${courseList}">
+        <td th:text="${stat.count}"></td>
+        <td th:text="${c.name}"></td>
+        <td th:text="${c.credit}"></td>
+        <td>
+            <a th:href="@{/course/toEdit/{id}(id=${c.id})}">编辑</a>
+            <a th:href="@{/course/delete/{id}(id=${c.id})}" onclick="return confirm('确定要删除该课程吗？')">删除</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

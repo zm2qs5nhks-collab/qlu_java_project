@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>成绩列表</title>
+</head>
+<body>
+<h3>成绩列表</h3>
+
+<!-- 操作按钮 -->
+<a href="/score/toAddBatch" style="font-weight:bold;">📝 批量录入成绩</a>
+<a href="/score/toAdd">单条录入</a>
+<a href="/score/export">导出Excel</a>
+<a href="/score/distribution">成绩分布图</a>
+<a href="/score/report">📊 学习报表</a>
+<a href="/index">返回首页</a>
+
+<!-- 搜索：学号精准 + 姓名模糊 -->
+<form th:action="@{/score/list}" method="get" style="margin:10px 0;padding:8px;background:#f5f5f5;">
+    <label>学号：<input type="text" name="studentNo" th:value="${studentNo}" placeholder="精准查询"></label>
+    <label style="margin-left:10px;">姓名：<input type="text" name="name" th:value="${name}" placeholder="模糊查询"></label>
+    <button type="submit">🔍 搜索</button>
+    <a th:href="@{/score/list}">重置</a>
+</form>
+
+<!-- 搜索结果提示 -->
+<p style="color:red;font-weight:bold;" th:text="${msg}"></p>
+
+<table border="1" cellpadding="5" cellspacing="0" style="margin-top:10px">
+    <tr>
+        <th>序号</th>
+        <th>学号</th>
+        <th>学生姓名</th>
+        <th>课程名称</th>
+        <th>分数</th>
+        <th>操作</th>
+    </tr>
+    <tr th:each="s,stat : ${scoreList}">
+        <td th:text="${stat.count}"></td>
+        <td th:text="${s.student.studentNo}"></td>
+        <td th:text="${s.student.name}"></td>
+        <td th:text="${s.course.name}"></td>
+        <td th:text="${s.score}"></td>
+        <td>
+            <a th:href="@{/score/toEdit/{id}(id=${s.id})}">编辑</a>
+            <a th:href="@{/score/delete/{id}(id=${s.id})}" onclick="return confirm('确定删除该成绩吗？')">删除</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

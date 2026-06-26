@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>成绩编辑</title>
+</head>
+<body>
+<h3>成绩信息</h3>
+<form action="/score/save" method="post">
+    <input type="hidden" name="id" th:value="${score?.id}">
+
+    <div style="margin:5px 0;">
+        学生：
+        <select name="student.id">
+            <option th:each="stu : ${studentList}"
+                    th:value="${stu.id}"
+                    th:text="${stu.name}"
+                    th:selected="${score?.student?.id == stu.id}">
+            </option>
+        </select>
+    </div>
+
+    <div style="margin:5px 0;">
+        课程：
+        <select name="course.id">
+            <option th:each="cou : ${courseList}"
+                    th:value="${cou.id}"
+                    th:text="${cou.name}"
+                    th:selected="${score?.course?.id == cou.id}">
+            </option>
+        </select>
+    </div>
+
+    <div style="margin:5px 0;">
+        分数：
+        <input type="number" name="score" th:value="${score?.score}">
+    </div>
+
+    <div style="margin-top:10px;">
+        <button type="submit">提交</button>
+        <a href="/score/list">返回成绩列表</a>
+    </div>
+</form>
+</body>
+</html>

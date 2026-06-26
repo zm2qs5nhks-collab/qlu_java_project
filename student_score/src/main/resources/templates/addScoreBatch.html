@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>批量录入成绩</title>
+    <style>
+        table { border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 6px 10px; text-align: center; }
+        th { background: #f0f0f0; }
+        .score-input { width: 70px; }
+    </style>
+</head>
+<body>
+<h3>批量录入成绩</h3>
+
+<!-- 提示信息 -->
+<p style="color:green" th:text="${msg}"></p>
+<p style="color:red" th:text="${err}"></p>
+
+<!-- 步骤1：选择课程 -->
+<form th:action="@{/score/toAddBatch}" method="get" id="courseForm">
+    <label>选择课程：</label>
+    <select name="courseId" onchange="document.getElementById('courseForm').submit()">
+        <option value="">-- 请选择课程 --</option>
+        <option th:each="c : ${courseList}"
+                th:value="${c.id}"
+                th:text="${c.name}"
+                th:selected="${selectedCourseId != null && selectedCourseId.toString() == c.id.toString()}">
+        </option>
+    </select>
+</form>
+
+<!-- 步骤2：选课后展示所有学生，批量填分 -->
+<th:block th:if="${selectedCourseId != null && studentList != null && !studentList.isEmpty()}">
+    <form th:action="@{/score/saveBatch}" method="post">
+        <input type="hidden" name="courseId" th:value="${selectedCourseId}">
+
+        <p>当前课程：<b th:text="${selectedCourseName}"></b>，共 <b th:text="${studentList.size()}"></b> 名学生</p>
+
+        <table border="1">
+            <tr>
+                <th>序号</th>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>班级</th>
+                <th>成绩</th>
+            </tr>
+            <tr th:each="stu,stat : ${studentList}">
+                <td th:text="${stat.count}"></td>
+                <td th:text="${stu.studentNo}"></td>
+                <td th:text="${stu.name}"></td>
+                <td th:text="${stu.cls?.name}"></td>
+                <td>
+                    <input type="hidden" name="studentIds" th:value="${stu.id}">
+                    <input type="number" name="scores"
+                           class="score-input"
+                           min="0" max="100" step="0.5"
+                           th:value="${existingScoreMap != null ? existingScoreMap[stu.id] : ''}"
+                           placeholder="0-100">
+                </td>
+            </tr>
+        </table>
+
+        <div style="margin-top:15px;">
+            <button type="submit">💾 批量保存成绩</button>
+            <a th:href="@{/score/list}">返回成绩列表</a>
+        </div>
+    </form>
+</th:block>
+
+<!-- 未选课时的提示 -->
+<th:block th:if="${selectedCourseId == null}">
+    <p style="color:#888;">👆 请先在上方选择一门课程，然后为所有学生录入该课程的成绩。</p>
+    <a th:href="@{/score/list}">返回成绩列表</a>
+</th:block>
+
+</body>
+</html>

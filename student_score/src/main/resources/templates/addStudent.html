@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${student.id == null ? '新增学生' : '编辑学生'}"></title>
+</head>
+<body>
+<h3 th:text="${student.id == null ? '新增学生' : '编辑学生'}"></h3>
+<form th:action="@{/student/save}" method="post">
+    <!-- 主键隐藏域 -->
+    <input type="hidden" name="id" th:value="${student.id}">
+
+    <!-- 仅编辑时展示只读学号，新增页面不显示 -->
+    <div style="margin: 10px 0;" th:if="${student.id != null}">
+        <label>学号：</label>
+        <input type="text" th:value="${student.studentNo}" readonly>
+    </div>
+
+    <div style="margin: 10px 0;">
+        <label>学生姓名：</label>
+        <input type="text" name="name" th:value="${student.name}" required>
+    </div>
+
+    <div style="margin: 10px 0;">
+        <label>性别：</label>
+        <input type="radio" name="gender" value="男" th:checked="${student.gender == '男'}" checked>男
+        <input type="radio" name="gender" value="女" th:checked="${student.gender == '女'}">女
+    </div>
+
+    <div style="margin: 10px 0;">
+        <label>出生日期：</label>
+        <input type="date" name="birthday" th:value="${student.birthday}" required>
+    </div>
+
+    <div style="margin: 10px 0;">
+        <label>所属班级：</label>
+        <select name="cls.id">
+            <option th:each="cls : ${clsList}"
+                    th:value="${cls.id}"
+                    th:text="${cls.name}"
+                    th:selected="${student.cls?.id == cls.id}">
+            </option>
+        </select>
+    </div>
+
+    <div>
+        <button type="submit">提交保存</button>
+        <a th:href="@{/student/list}">返回学生列表</a>
+    </div>
+</form>
+</body>
+</html>

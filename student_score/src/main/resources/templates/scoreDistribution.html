@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>成绩正态分布统计图</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+</head>
+<body>
+<h3>学生成绩分布直方图 + 正态拟合曲线</h3>
+
+<!-- 课程选择器 -->
+<form th:action="@{/score/distribution}" method="get" style="margin-bottom:10px;">
+    <label>选择课程：
+        <select name="courseId" onchange="this.form.submit()">
+            <option value="">-- 全部课程 --</option>
+            <option th:each="c : ${courseList}"
+                    th:value="${c.id}"
+                    th:text="${c.name}"
+                    th:selected="${selectedCourseId != null && selectedCourseId.toString() == c.id.toString()}">
+            </option>
+        </select>
+    </label>
+    <a th:href="@{/score/distribution}">查看全部</a>
+</form>
+
+<div id="chart" style="width: 1000px;height: 550px;"></div>
+<br>
+<a href="/score/list">← 返回成绩列表</a>
+
+<script th:inline="javascript">
+    // 修复2：使用Thymeleaf JS内联标准语法 [[${表达式}]]
+    // 自动将Java集合转为合法JS数组，字符串自动加引号，避免语法错误
+    const xAxisData = [[${scoreData != null ? scoreData.keySet() : new java.util.ArrayList()}]];
+    const yAxisData = [[${scoreData != null ? scoreData.values() : new java.util.ArrayList()}]];
+    console.log("X轴数据：", xAxisData);
+    console.log("Y轴数据：", yAxisData);
+
+    const myChart = echarts.init(document.getElementById('chart'));
+    const option = {
+        title: {
+            text: '成绩各分数段人数分布（近似正态分布）'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['人数', '正态拟合曲线']
+        },
+        xAxis: {
+            type: 'category',
+            // 修复3：直接使用数组，错误的 [0] 下标已移除
+            data: xAxisData,
+            name: '分数区间'
+        },
+        yAxis: {
+            type: 'value',
+            name: '人数'
+        },
+        series: [
+            {
+                name: '人数',
+                type: 'bar',
+                // 修复4：替换未定义的 barData 为正确的 yAxisData
+                data: yAxisData
+            },
+            {
+                name: '正态拟合曲线',
+                type: 'line',
+                smooth: true,
+                data: yAxisData
+            }
+        ]
+    };
+    myChart.setOption(option);
+
+    // 窗口大小变化时自适应图表
+    window.addEventListener('resize', () => {
+        myChart.resize();
+    });
+</script>
+</body>
+</html>

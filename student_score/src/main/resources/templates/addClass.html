@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>班级编辑</title>
+</head>
+<body>
+<h3>班级信息</h3>
+<form action="/class/save" method="post">
+    <input type="hidden" name="id" th:value="${cls.id}">
+    <div>
+        班级名称：<input type="text" name="name" th:value="${cls.name}">
+    </div>
+    <div style="margin-top: 10px;">
+        <button type="submit">提交</button>
+        <a href="/class/list">返回</a>
+    </div>
+</form>
+</body>
+</html>

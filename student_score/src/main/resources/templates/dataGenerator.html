@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>测试数据生成工具</title>
+    <style>
+        .form-group { margin: 10px 0; }
+        label { display: inline-block; width: 160px; }
+        input[type="number"] { width: 100px; }
+        .tip { color: #888; font-size: 12px; }
+        .result-box { background: #e8f5e9; padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .err-box { background: #ffebee; padding: 15px; margin: 15px 0; border-radius: 5px; color: #c62828; }
+    </style>
+</head>
+<body>
+<h3>🧪 测试数据生成工具</h3>
+<p class="tip">随机生成大量学生及其成绩，学号唯一，每科成绩以指定均值为中心呈正态分布（Box-Muller算法）。</p>
+
+<!-- 提示信息 -->
+<div class="result-box" th:if="${msg}" th:text="${msg}"></div>
+<div class="err-box" th:if="${err}" th:text="${err}"></div>
+
+<!-- 参数表单 -->
+<form th:action="@{/test/generate}" method="post">
+    <div class="form-group">
+        <label>学生数量：</label>
+        <input type="number" name="count" value="100000" min="1" max="1000000">
+        <span class="tip">（建议10万，可酌情调整）</span>
+    </div>
+    <div class="form-group">
+        <label>成绩均值：</label>
+        <input type="number" name="mean" value="80" min="0" max="100" step="1">
+        <span class="tip">正态分布中心，默认80分</span>
+    </div>
+    <div class="form-group">
+        <label>成绩标准差：</label>
+        <input type="number" name="stdDev" value="10" min="1" max="50" step="1">
+        <span class="tip">默认10，约68%成绩落在70~90分</span>
+    </div>
+    <div class="form-group">
+        <label>同时插入数据库：</label>
+        <select name="insertToDb">
+            <option value="false">仅生成文件</option>
+            <option value="true">生成文件 + 插入数据库</option>
+        </select>
+        <span class="tip">⚠ 插入数据库较慢，仅供测试</span>
+    </div>
+    <div class="form-group">
+        <button type="submit" style="padding:8px 24px;font-size:16px;">🚀 开始生成</button>
+        <a href="/index">返回首页</a>
+    </div>
+</form>
+
+<!-- 生成结果展示 -->
+<div th:if="${result != null}">
+    <h4>生成结果：</h4>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><td>状态</td><td th:text="${result.status}"></td></tr>
+        <tr><td>生成数量</td><td th:text="${result.count}"></td></tr>
+        <tr><td>耗时（秒）</td><td th:text="${result.elapsedSeconds}"></td></tr>
+        <tr><td>均值</td><td th:text="${result.mean}"></td></tr>
+        <tr><td>标准差</td><td th:text="${result.stdDev}"></td></tr>
+        <tr><td>输出文件</td><td th:text="${result.filePath}"></td></tr>
+        <tr><td>已入库</td><td th:text="${result.insertedToDb}"></td></tr>
+    </table>
+</div>
+</body>
+</html>

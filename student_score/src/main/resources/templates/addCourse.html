@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>课程编辑</title>
+</head>
+<body>
+<h3>课程信息</h3>
+<form action="/course/save" method="post">
+    <!-- 加上 ? 空安全，防止新增时对象为空报错 -->
+    <input type="hidden" name="id" th:value="${course?.id}">
+    <!-- 数据库字段是name，实体属性也要是name，name属性和取值统一改成name -->
+    <div>课程名称：<input type="text" name="name" th:value="${course?.name}"></div>
+    <!-- 新增学分输入框，name和实体credit对应 -->
+    <div style="margin-top: 10px;">学分：<input type="text" name="credit" th:value="${course?.credit}"></div>
+    <div style="margin-top: 10px;">
+        <button type="submit">提交</button>
+        <a href="/course/list">返回</a>
+    </div>
+</form>
+</body>
+</html>

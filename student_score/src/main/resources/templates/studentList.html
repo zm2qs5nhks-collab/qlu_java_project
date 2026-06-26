@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学生列表</title>
+</head>
+<body>
+<h3>学生信息列表</h3>
+
+<!-- 姓名模糊搜索框 -->
+<form th:action="@{/student/list}" method="get">
+    <input type="text" name="name" th:value="${name}" placeholder="请输入学生姓名模糊查询">
+    <button type="submit">搜索</button>
+    <a th:href="@{/student/list}">重置</a>
+</form>
+
+<a th:href="@{/student/toAdd}" style="margin:10px 0;display:inline-block">新增学生</a>
+
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>序号</th>
+        <th>学号</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>出生日期</th>
+        <th>班级</th>
+        <th>操作</th>
+    </tr>
+    <tr th:each="stu,stat : ${studentList}">
+        <td th:text="${stat.count}"></td>
+        <td th:text="${stu.studentNo}"></td>
+        <td th:text="${stu.name}"></td>
+        <td th:text="${stu.gender}"></td>
+        <td th:text="${stu.birthday}"></td>
+        <td th:text="${stu.cls?.name}"></td>
+        <td>
+            <a th:href="@{/student/toEdit/{id}(id=${stu.id})}">编辑</a>
+            <a th:href="@{/student/delete/{id}(id=${stu.id})}" onclick="return confirm('确定删除该学生吗？')">删除</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

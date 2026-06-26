@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学习情况报表</title>
+    <style>
+        table { border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        th, td { padding: 5px 8px; text-align: center; border: 1px solid #ccc; }
+        th { background: #4CAF50; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        tr:hover { background: #e8f5e9; }
+        .highlight { background: #fff9c4 !important; font-weight: bold; }
+        .rank-1 { background: #ffd700 !important; }
+        .rank-2 { background: #c0c0c0 !important; }
+        .rank-3 { background: #cd7f32 !important; }
+    </style>
+</head>
+<body>
+<h3>📊 学生学习情况报表（按总分降序排列）</h3>
+
+<!-- 导出按钮 -->
+<div style="margin-bottom:10px;">
+    <a th:href="@{/score/report/exportTxt}" style="padding:5px 12px;background:#2196F3;color:white;text-decoration:none;border-radius:3px;margin-right:10px;">📄 导出 TXT</a>
+    <a th:href="@{/score/report/exportExcel}" style="padding:5px 12px;background:#4CAF50;color:white;text-decoration:none;border-radius:3px;margin-right:10px;">📊 导出 Excel（POI加分项）</a>
+    <a href="/index">返回首页</a>
+</div>
+
+<!-- 报表表格 -->
+<th:block th:if="${reportRows != null && !reportRows.isEmpty()}">
+    <p>共 <b th:text="${reportRows.size()}"></b> 名学生</p>
+    <table border="1">
+        <tr>
+            <th>排名</th>
+            <th>学号</th>
+            <th>姓名</th>
+            <th>班级</th>
+            <!-- 动态课程列 -->
+            <th:block th:each="entry : ${reportRows[0].courseScores}">
+                <th th:text="${entry.key} + '成绩'"></th>
+                <th th:text="${entry.key} + '均值'"></th>
+            </th:block>
+            <th>总分</th>
+            <th>总平均分</th>
+        </tr>
+        <tr th:each="row,stat : ${reportRows}"
+            th:classappend="${stat.index == 0} ? 'rank-1' : (${stat.index == 1} ? 'rank-2' : (${stat.index == 2} ? 'rank-3' : ''))">
+            <td th:text="${stat.index + 1}"></td>
+            <td th:text="${row.studentNo}"></td>
+            <td th:text="${row.studentName}"></td>
+            <td th:text="${row.className}"></td>
+            <th:block th:each="entry : ${row.courseScores}">
+                <td th:text="${entry.value}"></td>
+                <td th:text="${row.courseClassAvgs[entry.key]}"></td>
+            </th:block>
+            <td class="highlight" th:text="${row.totalScore}"></td>
+            <td th:text="${row.classTotalAvg}"></td>
+        </tr>
+    </table>
+</th:block>
+
+<!-- 无数据提示 -->
+<th:block th:if="${reportRows == null || reportRows.isEmpty()}">
+    <p style="color:#888;">暂无成绩数据，请先录入成绩。</p>
+</th:block>
+
+<br>
+<a href="/score/list">← 返回成绩列表</a>
+</body>
+</html>

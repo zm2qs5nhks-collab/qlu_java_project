@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>班级列表</title>
+</head>
+<body>
+<h3>班级列表</h3>
+<a href="/class/toAdd">新增班级</a>
+<a href="/">返回首页</a>
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <th>ID</th>
+        <th>班级名称</th>
+        <th>操作</th>
+    </tr>
+    <tr th:each="c,stat : ${classList}">
+        <!-- 页面展示序号：永远从1开始连续排序，删除数据后自动重排 -->
+        <td th:text="${stat.count}"></td>
+        <!-- 数据库真实主键ID可以隐藏，也可以保留 -->
+        <td th:text="${c.name}"></td>
+        <td>
+            <a th:href="@{/class/toEdit/{id}(id=${c.id})}">编辑</a>
+            <a th:href="@{/class/delete/{id}(id=${c.id})}" onclick="return confirm('确定删除？')">删除</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
