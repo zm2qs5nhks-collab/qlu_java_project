@@ -31,32 +31,18 @@
 
 ### 项目架构
 
-```
-┌─────────────────────────────────────────────┐
-│                Browser (Thymeleaf)           │
-└──────────────────┬──────────────────────────┘
-                   │ HTTP
-┌──────────────────▼──────────────────────────┐
-│            Controller 层 (6个)               │
-│  Login / Student / Score / Course / Cls /   │
-│         DataGenerator                       │
-└──────────────────┬──────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────┐
-│             Service 层 (6个)                 │
-│  业务逻辑：CRUD / 报表生成 / 数据生成 / 认证  │
-└──────────────────┬──────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────┐
-│           Repository 层 (5个)                │
-│       Spring Data JPA 数据访问接口           │
-└──────────────────┬──────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────┐
-│              MySQL 数据库                     │
-│  表：student / score / course / cls /        │
-│       user_account                          │
-└─────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    A["🖥 Browser<br/>（Thymeleaf 模板引擎）"]
+    B["📡 Controller 层（6个）<br/>Login / Student / Score / Course / Cls / DataGenerator"]
+    C["⚙ Service 层（6个）<br/>业务逻辑：CRUD / 报表生成 / 数据生成 / 认证"]
+    D["💾 Repository 层（5个）<br/>Spring Data JPA 数据访问接口"]
+    E["🗄 MySQL 数据库<br/>表：student / score / course / cls / user_account"]
+
+    A -->|"HTTP 请求"| B
+    B --> C
+    C --> D
+    D --> E
 ```
 
 ---
